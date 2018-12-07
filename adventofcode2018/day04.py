@@ -1,7 +1,7 @@
 import io
 import re
 from collections import defaultdict
-from typing import Sequence, Tuple, Mapping, Iterable, NamedTuple, MutableMapping
+from typing import Sequence, Tuple, Mapping, Iterable, NamedTuple, MutableMapping, Optional
 
 
 class GuardData:
@@ -21,14 +21,36 @@ class GuardData:
         minute, value = item
         return value
 
-    def sleepiest_minute(self) -> int:
-        return sorted(self.minutes_asleep.items(), key=self._sleepiest_minute_sort, reverse=True)[0][0]
+    def sleepiest_minute(self) -> Optional[int]:
+        try:
+            return sorted(self.minutes_asleep.items(), key=self._sleepiest_minute_sort, reverse=True)[0][0]
+        except IndexError:
+            return None
+
+    def sleepiest_minute_with_freq(self) -> Tuple[Optional[int], int]:
+        try:
+            return tuple(sorted(self.minutes_asleep.items(), key=self._sleepiest_minute_sort, reverse=True)[0])
+        except IndexError:
+            return None, 0
 
 
 def part1(x: str) -> int:
     """
     Computes the number of overlapping points
     """
+    guards = load_guard_data(x)
+
+    sleepiest_guard = max(guards.values(), key=lambda g: g.total_minutes_asleep())
+    return sleepiest_guard.guard_id * sleepiest_guard.sleepiest_minute()
+
+
+def part2(x: str) -> int:
+    guards = load_guard_data(x)
+    reliable_guard = max(guards.values(), key=lambda g: g.sleepiest_minute_with_freq()[1])
+    return reliable_guard.guard_id * reliable_guard.sleepiest_minute()
+
+
+def load_guard_data(x):
     guards: MutableMapping[int, GuardData] = {}
     guard: GuardData = None
     fell_asleep_at: int = None
@@ -46,12 +68,9 @@ def part1(x: str) -> int:
             guard = guards.setdefault(guard_id, GuardData(guard_id))
         # claim = Claim(**match.groupdict())
         # add_claim(claim, fabric)
-
     for guard_id, guard in guards.items():
         print(f'{guard_id}: {guard.total_minutes_asleep()}, {guard.sleepiest_minute()}')
-
-    sleepiest_guard = max(guards.values(), key=lambda g: g.total_minutes_asleep())
-    return sleepiest_guard.guard_id * sleepiest_guard.sleepiest_minute()
+    return guards
 
 
 # def part2(x: str) -> Iterable[int]:
@@ -1213,4 +1232,4 @@ puzzle_input = '''
 
 if __name__ == '__main__':
     print(part1(puzzle_input))
-    print(list(part2(puzzle_input)))
+    print(part2(puzzle_input))
