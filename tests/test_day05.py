@@ -4,10 +4,10 @@ from adventofcode2018 import day05
 
 
 @pytest.mark.parametrize('x,output', [
-    # ('aA', 0),
-    # ('abBA', 0),
-    # ('abAB', 4),
-    # ('aabAAB', 6),
+    ('aA', 0),
+    ('abBA', 0),
+    ('abAB', 4),
+    ('aabAAB', 6),
     ('dabAcCaCBAcCcaDA', 10),
 ])
 def test_part1(x: str, output: int) -> None:

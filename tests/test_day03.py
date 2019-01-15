@@ -24,5 +24,5 @@ def test_part1(x: str, output: int) -> None:
     ''', 3),
 ])
 def test_part2(x: str, output: int) -> None:
-    assert day03.part2(x) == output
+    assert list(day03.part2(x))[0] == output
 

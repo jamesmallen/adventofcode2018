@@ -18,12 +18,16 @@ def react(x: str) -> str:
                 return ''
             # backtrack for new trigger
             i -= 2
-            c = x[i]
+            # i = 0
+            next_trigger = None
+            continue
         if c.isupper():
             next_trigger = c.lower()
         else:
             next_trigger = c.upper()
         i += 1
+        if i > 10000:
+            pass
 
     return x
 
@@ -34,6 +38,7 @@ def part1(x: str) -> int:
         x = react(x)
         last_len = len(x)
     return len(x)
+
 
 def part2(x: str) -> int:
     pass
