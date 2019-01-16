@@ -17,11 +17,10 @@ def test_part1(x: str, output: int) -> None:
 
 
 @pytest.mark.parametrize('x,output', [
-    ('''
-    ''', 4455),
+    ('dabAcCaCBAcCcaDA', 4),
 ])
 def test_part2(x: str, output: int) -> None:
-    pass
+    assert day05.part2(x) == output
 
 #
 # @pytest.mark.parametrize('x,output', [
